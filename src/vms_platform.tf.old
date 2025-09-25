@@ -1,0 +1,12 @@
+# 
+variable "vm_base" {
+  type = map(any)
+  default = {
+    cores         = 2,
+    memory        = 1,
+    core_fraction = 5,
+    hdd_size      = 10
+    hdd_type      = "network-hdd"
+    image_family  = "ubuntu-2004-lts"
+  }
+}
