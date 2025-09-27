@@ -8,12 +8,16 @@ resource "yandex_compute_instance" "web" {
   count = 2
   
   name        = "web-${count.index+1}"
+  hostname    = "web-${count.index+1}" # для fqdn
   platform_id = "standard-v1"
 
   resources {
-    cores  = 2
-    memory = 1
-    core_fraction = 5
+    #cores  = 2
+    cores = var.vm_web_cores
+    #memory = 1
+    memory = var.vm_web_memory
+    #core_fraction = 5
+    core_fraction = var.vm_web_fraction
   }
 
   boot_disk {

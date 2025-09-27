@@ -35,7 +35,7 @@
 
 ### Задание 2
 
-1. Создайте файл `count-vm.tf`. Опишите в нём создание двух **одинаковых** ВМ  web-1 и web-2 (не web-0 и web-1) с минимальными параметрами, используя мета-аргумент **count loop**. Назначьте ВМ созданную в первом задании группу безопасности.(как это сделать узнайте в документации провайдера yandex/compute_instance )
+1. Создайте файл count-vm.tf. Опишите в нём создание двух **одинаковых** ВМ  web-1 и web-2 (не web-0 и web-1) с минимальными параметрами, используя мета-аргумент **count loop**. Назначьте ВМ созданную в первом задании группу безопасности.(как это сделать узнайте в документации провайдера yandex/compute_instance )
 ```txt
 resource "yandex_compute_instance" "web" {
   count = 2
@@ -52,7 +52,7 @@ resource "yandex_compute_instance" "web" {
 ```
 [count-vm.tf](src/count-vm.tf)
 
-2. Создайте файл `for_each-vm.tf`. Опишите в нём создание двух ВМ для баз данных с именами "main" и "replica" **разных** по cpu/ram/disk_volume , используя мета-аргумент **for_each loop**. Используйте для обеих ВМ одну общую переменную типа:
+2. Создайте файл for_each-vm.tf. Опишите в нём создание двух ВМ для баз данных с именами "main" и "replica" **разных** по cpu/ram/disk_volume , используя мета-аргумент **for_each loop**. Используйте для обеих ВМ одну общую переменную типа:
 ```
 variable "each_vm" {
   type = list(object({  vm_name=string, cpu=number, ram=number, disk_volume=number }))
@@ -95,20 +95,20 @@ variable "each_vm" {
 
 4. ВМ из пункта 2.1 должны создаваться после создания ВМ из пункта 2.2.
 
-В [count-vm.tf](src/count-vm.tf) добавил
+В `count-vm.tf` добавил
 ```txt
 depends_on = [yandex_compute_instance.db_vm]
 ```
 
 5. Используйте функцию file в local-переменной для считывания ключа ~/.ssh/id_rsa.pub и его последующего использования в блоке metadata, взятому из ДЗ 2.
 
-[for_each-vm.tf](src/for_each-vm.tf)
+`for_each-vm.tf`
 ```txt
   metadata = {
     ssh-keys = "ubuntu:${local.public_ssh_key}"
   }
 ```
-[locals.tf](src/locals.tf)
+`locals.tf`
 ```txt
 locals {
   public_ssh_key = try(file("~/.ssh/id_ed25519.pub"))
@@ -135,9 +135,7 @@ resource "yandex_compute_disk" "data_disks" {
 }
 ```
 ![task_03_02](img/task_03_02.JPG)
-
 2. Создайте в том же файле **одиночную**(использовать count или for_each запрещено из-за задания №4) ВМ c именем "storage"  . Используйте блок **dynamic secondary_disk{..}** и мета-аргумент for_each для подключения созданных вами дополнительных дисков.
-[disk_vm.tf](src/disk_vm.tf)
 ```txt
 resource "yandex_compute_instance" "storage" {
     name = "storage"

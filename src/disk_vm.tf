@@ -1,18 +1,25 @@
 resource "yandex_compute_disk" "data_disks" {
-    count = 3
-    size = 1
-    type = "network-hdd"
+#    count = 3
+    count = var.vm_data_disks_count
+#    size = 1
+    size = var.vm_data_disks_size
+#    type = "network-hdd"
+    type = var.vm_data_disks_hdd
     name = "data-disk-${count.index + 1}"
 }
 
 resource "yandex_compute_instance" "storage" {
     name = "storage"
+    hostname = "storage" # fqdn
     platform_id = "standard-v1"
 
     resources {
-      cores = 2
-      memory = 1
-      core_fraction = 5
+#      cores = 2
+      cores = var.vm_storage_cores
+#      memory = 1
+      memory = var.vm_storage_memory
+#      core_fraction = 5
+      core_fraction = var.vm_storage_fraction
     }
 
     boot_disk {

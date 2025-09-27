@@ -31,6 +31,7 @@ variable "each_vm" {
 resource "yandex_compute_instance" "db_vm" {
   for_each = { for i in var.each_vm : i.vm_name => i}
   name = each.value.vm_name
+  hostname    = each.value.vm_name # fqdn
 
   platform_id = each.value.platform_id
   resources {
